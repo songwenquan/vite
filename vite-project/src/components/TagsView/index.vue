@@ -39,11 +39,9 @@ const { visitedViews } = toRefs(reactive(useStoreState('menu', ['visitedViews'])
 const { MUT_DeleteMenuvisitedViews } = useStoreMutations('menu', ['MUT_DeleteMenuvisitedViews']);
 const { theme } = toRefs(reactive(useStoreState('app', ['theme'])));
 const { proxy } = getCurrentInstance();
-const { visible, name, url, left, top, selectedTag, isFirstView, isLastView, tagIndex } = toRefs(
+const { visible, left, top, selectedTag, isFirstView, isLastView, tagIndex } = toRefs(
 	reactive({
 		visible: false,
-		name: '',
-		url: '',
 		left: 0,
 		top: 0,
 		selectedTag: {},

@@ -19,11 +19,11 @@ const { proxy } = getCurrentInstance() as any; // this
 const props = defineProps({
 	trendsDateType: {
 		type: Number,
-		default: '',
+		default: null,
 	},
 	trendsSwitch: {
 		type: Number,
-		default: '',
+		default: null,
 	},
 	formModel: {
 		type: Object,
@@ -130,9 +130,8 @@ const hitIndicator = async () => {
 		}
 	}
 };
-watch(
-	() => [trendsDateType, trendsSwitch],
-	(newVal, oldVal) => {
+watch(() => [trendsDateType, trendsSwitch], (newVal, oldVal) => {
+  console.log(newVal,oldVal)
 		changeKeyList();
 		hitIndicator();
 	},

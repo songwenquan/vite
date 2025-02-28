@@ -6,7 +6,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElLoading } from 'element-plus';
 import _ from 'lodash';
-import * as qs from 'qs'
+import * as qs from 'qs';
 axios.defaults.withCredentials = true;
 // 自定义validateStatus函数
 const validateStatus = (status: any) => {

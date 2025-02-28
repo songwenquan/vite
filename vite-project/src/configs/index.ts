@@ -5,10 +5,10 @@
  */
 const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 export let config: any = {};
-let configModule =  import(`./modules/${environment}.config.ts`);
-await configModule.then((e)=>{
-	config = e.default
-})
+let configModule = import(`./modules/${environment}.config.ts`);
+await configModule.then((e) => {
+	config = e.default;
+});
 export default {
 	// 组件内部使用：
 	install(app: any) {

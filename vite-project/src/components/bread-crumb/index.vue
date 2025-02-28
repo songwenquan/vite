@@ -30,9 +30,9 @@ const handleLink = (item: any) => {
 	const { redirect, menuUrl } = item;
 	if (redirect) {
 		router.push({ path: redirect });
-	}else {
-    router.push({ path: pathCompile(menuUrl) });
-  }
+	} else {
+		router.push({ path: pathCompile(menuUrl) });
+	}
 };
 </script>
 

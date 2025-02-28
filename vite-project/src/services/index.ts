@@ -11,9 +11,9 @@ const modules = import.meta.glob('./**/*.ts');
 async function loadModules() {
 	const services = {}; // 假设这是你的全局服务对象
 	for (const path in modules) {
-		const module:any = await modules[path]();
+		const module: any = await modules[path]();
 		const moduleDefinition = module.default || module;
-		const modulePath:any = path
+		const modulePath: any = path
 			.replace(/^\.\/modules\//, '')
 			.replace(/(\.service)?\.\w+$/, '')
 			.split('/')

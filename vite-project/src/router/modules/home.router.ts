@@ -16,9 +16,9 @@ export const constantRoutes = [
 			{
 				path: 'profile',
 				component: () => import('@/views/system/user/profile/index.vue'),
-				name: 'Profile'
-			}
-		]
+				name: 'Profile',
+			},
+		],
 	},
 ];
 export default constantRoutes;

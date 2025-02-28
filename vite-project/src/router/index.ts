@@ -26,11 +26,11 @@ let routerModule: Array<RouteRecordRaw> = [
 	// 配置入口 route, 用来控制 / 自动跳转，也可以不配置。
 ];
 // 使用 import.meta.glob 动态加载当前目录下的所有 TypeScript 文件
-const modules:Record<any, any> = import.meta.glob('./**/*.ts', { eager: true });
+const modules: Record<any, any> = import.meta.glob('./**/*.ts', { eager: true });
 // 遍历所有匹配的文件
 for (const path in modules) {
 	// 提取文件名
-	const fileName:any = path.split('/').pop();
+	const fileName: any = path.split('/').pop();
 	// 检查文件名是否匹配需要忽略的模式
 	if (!fileName.startsWith('index') && !fileName.endsWith('.unit.ts')) {
 		// 导入每个文件的默认导出并合并到 routerModule 数组中

@@ -38,17 +38,14 @@ import Header from '@/components/header/index.vue';
 import UserPanel from '@/components/user-panel/index.vue';
 import MenuLeft from '@/components/menu-left/index.vue';
 import TopNav from '@/components/top-nav/index.vue';
-import { childrenStr} from "@/utils/utils";
+import { childrenStr } from '@/utils/utils';
 const router = useRouter();
 const route = useRoute();
-let { isCollapse, activeIdx, subMenuClassName, levelList, leftMenu, isScreenfull } = toRefs(
+let { isCollapse, levelList, leftMenu } = toRefs(
 	reactive({
 		isCollapse: false as boolean, // 展开收起状态
-		activeIdx: '',
-		subMenuClassName: 'clear-top-drop-dowm',
 		levelList: [],
-		leftMenu: [],
-		isScreenfull: false,
+		leftMenu: []
 	})
 );
 // menu store-state-menu
@@ -74,7 +71,7 @@ const levelListFunc = () => {
 	const { path } = route;
 	(menuArray as any).value.map((item: any) => {
 		if (item.menuUrl === path) {
-			levelList = item;
+			levelList.value = item;
 			item.show = true;
 			// 存储当前节点名称
 			menuList.ACT_SetMatched({ menuName: item.menuName, menuUrl: item.menuUrl });
@@ -90,13 +87,13 @@ const levelListFunc = () => {
 		parentDirectory.map((item: any) => {
 			route.matched.map((items) => {
 				if (item.menuUrl === items.path) {
-          // 特殊处理
-          if(items.redirect == 'noRedirect'){
-            item.redirect = childrenStr([items],'1')
-            console.log(item.redirect,'111')
-          }else{
-            item.redirect = items.redirect;
-          }
+					// 特殊处理
+					if (items.redirect == 'noRedirect') {
+						item.redirect = childrenStr([items], '1');
+						console.log(item.redirect, '111');
+					} else {
+						item.redirect = items.redirect;
+					}
 				} else {
 					menuNameChild(item, items.children, 'path', 'redirect');
 				}
@@ -120,7 +117,7 @@ const menuArrayChildren = (item: any, children: any, path: any) => {
 	children.map((items: any) => {
 		if (items.menuUrl === path) {
 			items.show = true;
-			levelList = item;
+			levelList.value = item;
 			// 存储当前节点名称
 			menuList.ACT_SetMatched({ menuName: items.menuName, menuUrl: items.menuUrl });
 		} else {

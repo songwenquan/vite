@@ -42,7 +42,7 @@ const props = defineProps({
 });
 const { sub, basePath, isCollapse } = toRefs(props);
 onMounted(() => {
-	// console.log(props.basePath, basePath);
+	console.log(props.basePath, basePath);
 });
 </script>
 <style scoped lang="scss">

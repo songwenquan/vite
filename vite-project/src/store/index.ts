@@ -8,7 +8,7 @@ import { createApp } from 'vue';
 import { RootState } from '@/store/types';
 const app = createApp({});
 // 使用 import.meta.glob 来获取所有匹配的文件
-const files:Record<any, any> = import.meta.glob('./modules/*.ts', { eager: true });
+const files: Record<any, any> = import.meta.glob('./modules/*.ts', { eager: true });
 const modules: any = {};
 // 收集模块
 Object.keys(files).forEach((key) => {

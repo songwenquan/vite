@@ -1,7 +1,7 @@
 /* * @Author: wqsong2 * @Date: 2023/12/1 15:02 * @Desciption: */
 <template>
 	<div class="completion list-wrap">
-		<div @click="one('1'), two('2'), selectMenuItem('1')">{{ TBGBSXLX1('TBGBSXLX') }}{{ dataMap.msg }}</div>
+		<div @click="(one('1'), two('2'), selectMenuItem('1'))">{{ TBGBSXLX1('TBGBSXLX') }}{{ dataMap.msg }}</div>
 		<el-select v-model="value" multiple filterable allow-create default-first-option :reserve-keyword="false" collapse-tags>
 			<el-option v-for="item in options.list" :key="item.value" :label="item.label" :value="item.value">
 				<span style="float: left" class="span-style">{{ item.label }}</span>

@@ -55,7 +55,6 @@ const { option, echartsDom } = toRefs(
 const emit = defineEmits(['clickFunc']);
 const drawLine = (data: any) => {
 	let num = 0;
-	const _this = this;
 	data.data.map((item: any) => {
 		num += Number(item.value);
 	});

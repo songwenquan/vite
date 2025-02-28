@@ -107,16 +107,16 @@ export function isHttp(url: any) {
 	return url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1;
 }
 // 匹配views里面所有的.vue文件
-const modules:any = import.meta.glob('../views/**/*.vue');
+const modules: any = import.meta.glob('../views/**/*.vue');
 export const loadView = (view: string, type: any) => {
 	if (type === 1) {
 		return () => import('@/views/index.vue');
 	} else {
 		let res;
 		for (const path in modules) {
-			const dir = path.split('views/')[1].split('.vue')[0]
+			const dir = path.split('views/')[1].split('.vue')[0];
 			if (dir !== 'index' && dir === view) {
-				res = () => modules[path]()
+				res = () => modules[path]();
 				break; // 找到匹配项后退出循环
 			}
 		}

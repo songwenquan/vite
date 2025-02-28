@@ -4,7 +4,7 @@
  * @Description:用户 菜单 字典 登录 退出接口 isJson:是否json传参默认JSON  text:请求遮罩文字 hideLoading:是否隐藏请求遮罩
  */
 import HttpClient from '@/utils/http-client';
-import {config} from '@/configs/index';
+import { config } from '@/configs/index';
 const http1$ = new HttpClient(config.baseUrl);
 export default {
 	// 获取用户信息
@@ -35,11 +35,11 @@ export default {
 			method: 'post',
 		});
 	},
-  // 字典接口
-  distData(data:any){
-    return http1$.request({
-      url: '/system/dict/data/type/' + data,
-      method: 'get',
-    });
-  }
+	// 字典接口
+	distData(data: any) {
+		return http1$.request({
+			url: '/system/dict/data/type/' + data,
+			method: 'get',
+		});
+	},
 };

@@ -16,12 +16,12 @@
 			<!-- 顶部菜单超出数量折叠 -->
 			<el-sub-menu :style="{ '--theme': theme }" index="more" v-if="moreMenus.length > 0" :class="routerFunc(moreMenus) ? 'is-active' : ''">
 				<template #title>更多菜单</template>
-				<template v-for="(item, index) in moreMenus" :key="index">
+				<div v-for="(item,index) in moreMenus" :key="index">
 					<el-menu-item :index="firstChildPath(item)" :class="route.path.startsWith(item.path) ? 'active-menu-item' : ''">
 						<svg-icon :icon-class="item.meta.icon" style="margin-right: 5px" />
 						{{ item.meta.title }}
 					</el-menu-item>
-				</template>
+				</div>
 			</el-sub-menu>
 		</el-menu>
 	</div>
@@ -41,6 +41,7 @@ const { visibleNumber, currentIndex, hideList } = toRefs(
 		hideList: [], // 隐藏侧边栏路由
 	})
 );
+console.log(hideList)
 // 所有路由信息
 const { menu } = toRefs(reactive(useStoreState('menu', ['menu'])));
 // 主题颜色
@@ -91,6 +92,8 @@ const routerFunc = (moreMenus) => {
 // 默认激活菜单
 const activeMenu = computed(() => {
 	const path = route.path;
+  console.log(path)
+  return path;
 });
 // 获取模块菜单的第一子路由
 const firstChildPath = computed(() => {
@@ -141,9 +144,9 @@ const handleSelect = (key) => {
 	}
 };
 const childrenMenus = computed(() => {
-	let childrenMenus:any = [];
+	let childrenMenus: any = [];
 	let menus = JSON.parse(JSON.stringify(menu.value));
-	menus.map((router:any) => {
+	menus.map((router: any) => {
 		for (let item in router.children) {
 			if (router.children[item].parentPath === undefined) {
 				if (router.path === '/') {
@@ -160,9 +163,9 @@ const childrenMenus = computed(() => {
 	});
 	return constantRoutes.concat(childrenMenus);
 });
-const activeRoutes = (key:any) => {
+const activeRoutes = (key: any) => {
 	let routes = [];
-	console.log(key);
+	console.log(key,routes);
 };
 onMounted(() => {
 	window.addEventListener('resize', setVisibleNumber);
@@ -175,11 +178,11 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-::v-deep(.el-menu--horizontal>.el-sub-menu .el-sub-menu__title) {
+::v-deep(.el-menu--horizontal > .el-sub-menu .el-sub-menu__title) {
 	border-bottom: none;
 	color: #ffffff;
 }
-::v-deep(.el-menu--horizontal>.el-sub-menu .el-sub-menu__title:hover) {
+::v-deep(.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover) {
 	background: none;
 	color: #ffffff;
 }

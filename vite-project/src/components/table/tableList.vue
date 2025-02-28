@@ -1,109 +1,104 @@
 /* * @Author: wqsong2 * @Date: 2023/11/22 15:19 * @Desciption:列表通用组件 */
 <template>
-  <el-table
-    ref="table"
-    :scrollbar-always-on="scrollbarAlwayson"
-    :data="fatherList.length > 0 ? fatherList : listData"
-    :header-cell-style="headerCellStyle"
-    :border="border"
-    @expand-change="expandChange"
-    :row-key="getRowKeys"
-    :expand-row-keys="expandRowKeys"
-    :row-class-name="tableRowClassName"
-    @select="selectRow"
-    @select-all="selectAll"
-    @current-change="rowCurrentChange"
-    :height="heights !== '' ? heights : 'auto'"
-  >
-    <el-table-column type="expand" v-if="showExpand">
-      <template #default="props">
-        <el-table :data="props.row.expandData" class="table_child">
-          <el-table-column v-for="(item, index1) in expandKey" :width="item.width" show-overflow-tooltip :key="index1" :label="item.name">
-            <template #default="scope1">
-              <span>{{ scope1.row[item.code] }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </template>
-    </el-table-column>
-    <el-table-column v-if="multiple" type="selection" width="55"></el-table-column>
-    <el-table-column type="index" width="80" v-if="showIndex" label="序号">
-      <template #default="scope">
-        <span :class="'index-' + scope.$index">{{ scope.$index + 1 }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      :show-overflow-tooltip="item.type === 'imageList' || item.type === 'fileList' ? false : true"
-      :fixed="item.fixeds"
-      :label="item.name"
-      :min-width="item.minWidth"
-      :width="item.width"
-      v-for="(item, index) in keyList"
-      :key="index"
-      align="center"
-    >
-      <template #default="scope">
-        <SvgIcons v-if="item.svgShow" :icon-class="scope.row.icon"  />
-        <div class="list" v-else-if="item.type === 'imageList'">
-          <div v-for="(items, index) in scope.row[item.code]" class="itemList" style="cursor: pointer" @click="item.click(items)">
-            <span>{{ items.name }}</span>
-            <el-icon style="margin-left: 10px; cursor: pointer" @click.stop="item.download(items, index)"><Bottom /></el-icon>
-          </div>
-        </div>
-        <div class="list" v-else-if="item.type === 'fileList'">
-          <div v-for="(items, index) in scope.row[item.code]" class="itemList" style="cursor: pointer" @click="item.click(items)">
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              :content="items.attachmentName"
-              placement="top"
-            >
-              <span>{{ items.attachmentName }}</span>
-            </el-tooltip>
-          </div>
-        </div>
-        <div v-else :class="item.click ? 'cursor-p color-1F75FF' : ''" @click="item.click ? item.click(scope.row) : ''" class="ell">
-          <div v-if="item.format" v-dompurify-html="item.format(item.code, scope.row)"></div>
-          <ex-slot v-else-if="item.render" :render="item.render" :row="scope.row" :index="scope.$index" :column="item" />
-          <span v-else>{{ scope.row[item.code] || '--' }}</span>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="btnObj.name" :width="btnObj.width" :fixed="btnObj.fiexd || false" v-if="btnObj.name" align="center">
-      <template #default="scope">
-        <el-button
-          v-for="(item, index) in btnObj.list"
-          v-show="item.hide === undefined ? true : item.hide"
-          :key="index"
-          @click="handleClick(scope.row, item.callBackName, scope.$index, fatherList.length > 0 ? fatherList : listData)"
-          :disabled="!btnStatus(scope.row, item)"
-          :type="item.type || 'primary'"
-          link
-          :icon="item.icons"
-        >
-          {{ item.name }}
-          <el-icon v-if="scope.row.attrFileDtoList && scope.row.attrFileDtoList.length > 0 && item.icon"><Check /></el-icon>
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <div class="pager-wrap tr mt10" v-if="listData.length > 0 && showPage">
-    <el-pagination
-      background
-      :current-page="pager.pageNum"
-      :page-size="pageSize"
-      :page-sizes="pageSizes"
-      :total="Number(total)"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      layout="->,total, sizes, prev, pager, next, jumper"
-    />
-  </div>
+	<el-table
+		ref="table"
+		:scrollbar-always-on="scrollbarAlwayson"
+		:data="fatherList.length > 0 ? fatherList : listData"
+		:header-cell-style="headerCellStyle"
+		:border="border"
+		@expand-change="expandChange"
+		:row-key="getRowKeys"
+		:expand-row-keys="expandRowKeys"
+		:row-class-name="tableRowClassName"
+		@select="selectRow"
+		@select-all="selectAll"
+		@current-change="rowCurrentChange"
+		:height="heights !== '' ? heights : 'auto'"
+	>
+		<el-table-column type="expand" v-if="showExpand">
+			<template #default="props">
+				<el-table :data="props.row.expandData" class="table_child">
+					<el-table-column v-for="(item, index1) in expandKey" :width="item.width" show-overflow-tooltip :key="index1" :label="item.name">
+						<template #default="scope1">
+							<span>{{ scope1.row[item.code] }}</span>
+						</template>
+					</el-table-column>
+				</el-table>
+			</template>
+		</el-table-column>
+		<el-table-column v-if="multiple" type="selection" width="55"></el-table-column>
+		<el-table-column type="index" width="80" v-if="showIndex" label="序号">
+			<template #default="scope">
+				<span :class="'index-' + scope.$index">{{ scope.$index + 1 }}</span>
+			</template>
+		</el-table-column>
+		<el-table-column
+			:show-overflow-tooltip="item.type === 'imageList' || item.type === 'fileList' ? false : true"
+			:fixed="item.fixeds"
+			:label="item.name"
+			:min-width="item.minWidth"
+			:width="item.width"
+			v-for="(item, index) in keyList"
+			:key="index"
+			align="center"
+		>
+			<template #default="scope">
+				<SvgIcons v-if="item.svgShow" :icon-class="scope.row.icon" />
+				<div class="list" v-else-if="item.type === 'imageList'">
+					<div v-for="(items, index) in scope.row[item.code]" :key="index" class="itemList" style="cursor: pointer" @click="item.click(items)">
+						<span>{{ items.name }}</span>
+						<el-icon style="margin-left: 10px; cursor: pointer" @click.stop="item.download(items, index)"><Bottom /></el-icon>
+					</div>
+				</div>
+				<div class="list" v-else-if="item.type === 'fileList'">
+					<div v-for="(items, index) in scope.row[item.code]" :key="index" class="itemList" style="cursor: pointer" @click="item.click(items)">
+						<el-tooltip class="box-item" effect="dark" :content="items.attachmentName" placement="top">
+							<span>{{ items.attachmentName }}</span>
+						</el-tooltip>
+					</div>
+				</div>
+				<div v-else :class="item.click ? 'cursor-p color-1F75FF' : ''" @click="item.click ? item.click(scope.row) : ''" class="ell">
+					<div v-if="item.format" v-dompurify-html="item.format(item.code, scope.row)"></div>
+					<ex-slot v-else-if="item.render" :render="item.render" :row="scope.row" :index="scope.$index" :column="item" />
+					<span v-else>{{ scope.row[item.code] || '--' }}</span>
+				</div>
+			</template>
+		</el-table-column>
+		<el-table-column :label="btnObj.name" :width="btnObj.width" :fixed="btnObj.fiexd || false" v-if="btnObj.name" align="center">
+			<template #default="scope">
+				<el-button
+					v-for="(item, index) in btnObj.list"
+					v-show="item.hide === undefined ? true : item.hide"
+					:key="index"
+					@click="handleClick(scope.row, item.callBackName, scope.$index, fatherList.length > 0 ? fatherList : listData)"
+					:disabled="!btnStatus(scope.row, item)"
+					:type="item.type || 'primary'"
+					link
+					:icon="item.icons"
+				>
+					{{ item.name }}
+					<el-icon v-if="scope.row.attrFileDtoList && scope.row.attrFileDtoList.length > 0 && item.icon"><Check /></el-icon>
+				</el-button>
+			</template>
+		</el-table-column>
+	</el-table>
+	<div class="pager-wrap tr mt10" v-if="listData.length > 0 && showPage">
+		<el-pagination
+			background
+			:current-page="pager.pageNum"
+			:page-size="pageSize"
+			:page-sizes="pageSizes"
+			:total="Number(total)"
+			@size-change="handleSizeChange"
+			@current-change="handleCurrentChange"
+			layout="->,total, sizes, prev, pager, next, jumper"
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { toRefs, reactive, nextTick, getCurrentInstance, ref } from 'vue';
-import SvgIcons from "@/components/svgIcons/index.vue";
+import SvgIcons from '@/components/svgIcons/index.vue';
 const { proxy } = getCurrentInstance() as any; // this
 const exSlot = {
 	functional: true,
@@ -313,7 +308,7 @@ const getList = () => {
 		service.value &&
 			api.value &&
 			proxy.$api[service.value][api.value](param.value).then(async (res: any) => {
-        console.log(res)
+				console.log(res);
 				if (res.flag || res.code == '200') {
 					if (props.handleData) {
 						listData.value = props.handleData(res)[0];
@@ -334,7 +329,7 @@ const getList = () => {
 };
 // 某行自定义class名字
 const tableRowClassName = (row: any, rowIndex: number) => {
-	// console.log(row, rowIndex);
+	console.log(row, rowIndex,'row, rowIndex');
 	if (props.getTableRowClassName) {
 		return props.getTableRowClassName(row);
 	} else {
@@ -443,37 +438,37 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-::v-deep(.el-table--border), ::v-deep(.el-table--group) {
+::v-deep(.el-table--border),
+::v-deep(.el-table--group) {
 	border: 1px solid #ebeef5 !important ;
 }
-::v-deep(.el-table__header-wrapper th){
-    word-break: break-word;
-    background-color: #f1f7ff !important;
-    color: #515a6e;
-    height: 40px !important;
-    font-size: 13px;
+::v-deep(.el-table__header-wrapper th) {
+	word-break: break-word;
+	background-color: #f1f7ff !important;
+	color: #515a6e;
+	height: 40px !important;
+	font-size: 13px;
 }
 .list {
-  width: 100%;
-  margin-bottom: 20px;
-  .itemList {
-    background-color: rgba(54, 143, 255, 0.1);
-    color: #368fff;
-    padding: 2px 10px;
-    margin: 0px 5px 15px;
-    float: left;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    > span {
-      cursor: pointer;
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
+	width: 100%;
+	margin-bottom: 20px;
+	.itemList {
+		background-color: rgba(54, 143, 255, 0.1);
+		color: #368fff;
+		padding: 2px 10px;
+		margin: 0px 5px 15px;
+		float: left;
+		border-radius: 5px;
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+		> span {
+			cursor: pointer;
+			max-width: 120px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
 }
-
 </style>
