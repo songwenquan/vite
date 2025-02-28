@@ -31,7 +31,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { toRefs, reactive, ref, onMounted } from 'vue';
 import { useStoreState, useStoreActions } from '@/store/vuex';
 import SearchForm from '@/components/search-form/index.vue';
 import tableTitle from '@/components/table/tableTitle.vue';

@@ -34,14 +34,18 @@ import { isHttp } from '@/utils/utils';
 import constantRoutes from '@/router/modules/home.router';
 const route = useRoute();
 const router = useRouter();
-const { visibleNumber, currentIndex, hideList } = toRefs(
+const { visibleNumber, currentIndex} = toRefs(
 	reactive({
 		visibleNumber: null, // 顶部栏初始数
 		currentIndex: null, //当前激活菜单的
-		hideList: [], // 隐藏侧边栏路由
 	})
 );
-console.log(hideList)
+// const { hideList} = toRefs(
+//     reactive({
+//       hideList: [], // 隐藏侧边栏路由
+//     })
+// );
+// console.log(hideList)
 // 所有路由信息
 const { menu } = toRefs(reactive(useStoreState('menu', ['menu'])));
 // 主题颜色

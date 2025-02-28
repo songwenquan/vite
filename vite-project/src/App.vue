@@ -6,7 +6,6 @@
 	</el-config-provider>
 </template>
 <script lang="ts" setup>
-import { reactive, toRefs, computed, defineAsyncComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStoreState } from '@/store/vuex';
 const layouts: any = {

@@ -11,6 +11,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus';
 import viteCompression from 'vite-plugin-compression';
 import requireTransform from 'vite-plugin-require-transform';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import AutoImport from 'unplugin-auto-import/vite'
 import { buildConfig } from './src/utils/build';
 // https://vite.dev/config/
 const pathResolve = (dir: string) => {
@@ -39,6 +40,10 @@ const viteConfig = defineConfig((mode:ConfigEnv)=> {
       JSON.parse(env.VITE_OPEN_CDN) ? buildConfig.cdn() : null,
       requireTransform({
         fileRegex: /.js$|.vue$/
+      }),
+      AutoImport({
+        imports: ['vue', 'vue-router', 'pinia'],
+        dts: false
       }),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(process.cwd(), 'src/icons/svg')],

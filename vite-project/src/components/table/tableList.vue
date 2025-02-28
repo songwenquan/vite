@@ -329,7 +329,7 @@ const getList = () => {
 };
 // 某行自定义class名字
 const tableRowClassName = (row: any, rowIndex: number) => {
-	console.log(row, rowIndex,'row, rowIndex');
+	// console.log(row, rowIndex,'row, rowIndex');
 	if (props.getTableRowClassName) {
 		return props.getTableRowClassName(row);
 	} else {

@@ -90,7 +90,6 @@ const levelListFunc = () => {
 					// 特殊处理
 					if (items.redirect == 'noRedirect') {
 						item.redirect = childrenStr([items], '1');
-						console.log(item.redirect, '111');
 					} else {
 						item.redirect = items.redirect;
 					}

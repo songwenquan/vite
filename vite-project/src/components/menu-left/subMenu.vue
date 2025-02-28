@@ -40,10 +40,11 @@ const props = defineProps({
 		default: false,
 	},
 });
-const { sub, basePath, isCollapse } = toRefs(props);
-onMounted(() => {
-	console.log(props.basePath, basePath);
-});
+const { sub, isCollapse } = toRefs(props);
+// const {basePath } = toRefs(props);
+// onMounted(() => {
+// 	console.log(props.basePath, basePath);
+// });
 </script>
 <style scoped lang="scss">
 :deep(.is-active) {
@@ -94,3 +95,4 @@ onMounted(() => {
 	}
 }
 </style>
+oo
