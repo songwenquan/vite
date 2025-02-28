@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, getCurrentInstance } from 'vue';
 const { proxy } = getCurrentInstance() as any; //this
 const props = defineProps({
 	lineBasic: {

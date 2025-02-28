@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, getCurrentInstance, watch } from 'vue';
 import { useStoreMutations, useStoreState } from '@/store/vuex';
 import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();

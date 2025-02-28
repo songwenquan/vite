@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, toRefs } from 'vue';
 import { useStoreState } from '@/store/vuex';
 const { proxy } = getCurrentInstance() as any; // this
 

@@ -21,7 +21,6 @@
 <script setup lang="ts">
 import breadcrumb from '@/components/bread-crumb/index.vue';
 import TagsView from '@/components/TagsView/index.vue';
-import { onMounted, getCurrentInstance, reactive, toRefs, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 const { proxy } = getCurrentInstance() as any; // this
 const router = useRouter();

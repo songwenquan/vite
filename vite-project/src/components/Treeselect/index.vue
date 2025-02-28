@@ -35,7 +35,6 @@
 	</el-popover>
 </template>
 <script setup lang="ts">
-import { toRefs, reactive, watch, getCurrentInstance, ref, nextTick } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import { ElTree } from 'element-plus';
 import { last } from 'lodash';

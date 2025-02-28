@@ -43,7 +43,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { getCurrentInstance, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import LangSelect from '@/components/lang_select/index.vue';
 import type { FormInstance, FormRules } from 'element-plus';

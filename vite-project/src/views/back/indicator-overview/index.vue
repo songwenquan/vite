@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, onMounted, getCurrentInstance, ref, nextTick } from 'vue';
 import lineChartBasic from '@/components/echarts/lineChart/lineChartBasic.vue';
 import { useRouter } from 'vue-router';
 import detailList from '@/views/back/indicator-overview/comps/detailList.vue';

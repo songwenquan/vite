@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue';
 import { useStoreState } from '@/store/vuex';
 import { useRoute, useRouter } from 'vue-router';
 import * as pathToRegexp from 'path-to-regexp';

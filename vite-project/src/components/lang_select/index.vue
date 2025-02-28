@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import SvgIcons from '@/components/svgIcons/index.vue';
-import { getCurrentInstance, toRefs } from 'vue';
 import { useStoreMutations, useStoreState } from '@/store/vuex';
 const { proxy } = getCurrentInstance() as any; // this
 const props = defineProps({

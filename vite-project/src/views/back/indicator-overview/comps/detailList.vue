@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, watch, getCurrentInstance } from 'vue';
 import TableList from '@/components/table/tableList.vue';
 const { proxy } = getCurrentInstance() as any; // this
 const props = defineProps({

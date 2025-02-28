@@ -64,7 +64,6 @@ code映射字段 * @type 1.文本框 2.下拉框 3.部门tree 4.时间范围 */
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, watch } from 'vue';
 import { useStoreGetters } from '@/store/vuex';
 import Treeselect from '@/components/Treeselect/index.vue';
 const props = defineProps({

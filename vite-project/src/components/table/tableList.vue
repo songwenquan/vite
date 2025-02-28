@@ -97,7 +97,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, nextTick, getCurrentInstance, ref } from 'vue';
 import SvgIcons from '@/components/svgIcons/index.vue';
 const { proxy } = getCurrentInstance() as any; // this
 const exSlot = {
@@ -308,7 +307,6 @@ const getList = () => {
 		service.value &&
 			api.value &&
 			proxy.$api[service.value][api.value](param.value).then(async (res: any) => {
-				console.log(res);
 				if (res.flag || res.code == '200') {
 					if (props.handleData) {
 						listData.value = props.handleData(res)[0];

@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStoreState, useStoreActions } from '@/store/vuex';
 import Header from '@/components/header/index.vue';

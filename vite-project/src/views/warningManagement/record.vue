@@ -40,7 +40,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { toRefs, reactive, ref, getCurrentInstance, h } from 'vue';
 import { time, orgCode, exportExcel } from '@/utils/utils';
 import tableTitle from '@/components/table/tableTitle.vue';
 import TableList from '@/components/table/tableList.vue';

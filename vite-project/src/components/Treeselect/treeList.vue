@@ -29,7 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, getCurrentInstance, ref } from 'vue';
 import { ElTree } from 'element-plus';
 const { proxy } = getCurrentInstance() as any; // this
 interface Tree {

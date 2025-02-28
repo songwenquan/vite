@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, reactive, computed, watch, ref } from 'vue';
 import SubMenu from '@/components/menu-left/subMenu.vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();

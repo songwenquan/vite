@@ -27,7 +27,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { reactive, toRefs, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStoreState } from '@/store/vuex';
 import { isHttp } from '@/utils/utils';
@@ -96,7 +95,7 @@ const routerFunc = (moreMenus) => {
 // 默认激活菜单
 const activeMenu = computed(() => {
 	const path = route.path;
-  console.log(path)
+  // console.log(path)
   return path;
 });
 // 获取模块菜单的第一子路由

@@ -5,9 +5,7 @@
  */
 import { createRouter, createWebHistory, RouteRecordRaw, RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 import { checkPermission, childrenStr, isHttp } from '@/utils/utils';
-import { createApp } from 'vue';
 import { ElMessage } from 'element-plus';
-import { children } from '@/utils/utils';
 import store from '@/store';
 /* ---start: 顶部进度条加载 --- */
 import NProgress from 'nprogress';

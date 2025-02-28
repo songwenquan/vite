@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, toRefs } from 'vue';
 const props = defineProps({
 	sub: {
 		type: Object,

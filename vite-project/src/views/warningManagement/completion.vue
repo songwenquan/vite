@@ -21,7 +21,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref, watch } from 'vue';
 import { useStoreActions, useStoreGetters } from '@/store/vuex';
 import TreeList from '@/components/Treeselect/treeList.vue';
 const { proxy } = getCurrentInstance() as any; // this

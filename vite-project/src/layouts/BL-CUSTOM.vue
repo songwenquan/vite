@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const flag = ref(true);
