@@ -108,6 +108,8 @@ export default {
 				return {
 					label: a.label || a.dictLabel,
 					value: a.value || a.dictValue,
+					elTagType: a.listClass,
+					elTagClass: a.cssClass,
 					...a,
 				};
 			});

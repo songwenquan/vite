@@ -16,17 +16,35 @@
 					<el-button type="info" plain icon="Sort" @click="toggleExpandAll">展开/折叠</el-button>
 				</template>
 			</tableTitle>
-			<TableList
-				ref="tableList"
-				:showExpand="true"
-				:key-list="keyList"
-				:params="params"
-				service="menu"
-				:border="true"
-				api="menuList"
-				:handle-data="handleData"
-				heights="100%"
-			></TableList>
+      <el-table v-if="refreshTable" border :data="menuList" row-key="menuId" :default-expand-all="isExpandAll"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+        <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="icon" label="图标" align="center">
+          <template #default="scope">
+            <svg-icon :icon-class="scope.row.icon" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderNum" label="排序" width="90" align="center"></el-table-column>
+        <el-table-column prop="perms" label="权限标识" width="200" :show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column prop="component" label="组件路径" width="200" :show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center">
+          <template #default="scope">
+            <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" align="center" prop="createTime">
+          <template #default="scope">
+            <span>{{ (scope.row.createTime) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="220">
+          <template #default="scope">
+            <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" >修改</el-button>
+            <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)">新增</el-button>
+            <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 		</div>
 	</div>
 </template>
@@ -34,37 +52,30 @@
 import { useStoreState, useStoreActions } from '@/store/vuex';
 import SearchForm from '@/components/search-form/index.vue';
 import tableTitle from '@/components/table/tableTitle.vue';
-import TableList from '@/components/table/tableList.vue';
-const { list, moreButton, params, keyList } = toRefs(
+import {handleTree} from "@/utils/utils";
+const { proxy } = getCurrentInstance();
+const { list, moreButton, params,refreshTable,isExpandAll,menuList} = toRefs(
 	reactive({
 		moreButton: false as boolean, // 是否展示更多按钮
 		params: {}, // 搜索参数
 		list: [
 			{
-				code: 'ssqdName',
+				code: 'menuName',
 				name: '菜单名称',
 				span: 6,
 				type: 1,
 			},
 			{
-				code: 'itemType',
-				name: '办件类型',
+				code: 'status',
+				name: '状态',
 				span: 6,
 				type: 2,
 				dictKey: 'sys_normal_disable',
 			},
 		],
-		keyList: [
-			{
-				name: '菜单名称',
-				code: 'menuName',
-			},
-			{
-				name: '图标',
-				code: 'icon',
-				svgShow: true,
-			},
-		],
+    refreshTable:true,
+    isExpandAll:false,
+    menuList:[],
 	})
 );
 // 获取当前页面的列表标题
@@ -72,16 +83,37 @@ const { matched } = toRefs(reactive(useStoreState('menu', ['matched'])));
 // 调用store-dictList-actions接口获取当前页面依赖字典值
 const storeActions = useStoreActions('dictList', ['getDicListUrl']);
 storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
+const { sys_normal_disable } = toRefs(reactive(useStoreState('dictList', ['sys_normal_disable'])));
 
 // 查询
-const tableList = ref(null);
-const onSearch = () => {
-	(tableList.value as any).init();
+const onSearch = async () => {
+  const {code,data} = await proxy.$api.menu.menuList(params.value);
+  if(code === '200'){
+    menuList.value = handleTree(data,'menuId');
+  }else {
+    menuList.value = []
+  }
 };
-// 处理列表数据
-const handleData = (data: any) => {
-	return [data.data, data.data.length];
+// 展开/折叠操作
+const toggleExpandAll = () => {
+  refreshTable.value = false
+  isExpandAll.value = !isExpandAll.value
+  nextTick(() => {
+    refreshTable.value = true
+  })
 };
+// 修改
+const handleUpdate = (item:any) => {
+  console.log(item);
+}
+// 新增
+const handleAdd = (item:any) => {
+  console.log(item);
+}
+// 删除
+const handleDelete = (item:any) => {
+  console.log(item);
+}
 // 初始化执行方法
 const Initialize = (data: any) => {
 	params.value = data;

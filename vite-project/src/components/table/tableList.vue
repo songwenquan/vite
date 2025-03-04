@@ -2,6 +2,7 @@
 <template>
 	<el-table
 		ref="table"
+    :default-expand-all="true"
 		:scrollbar-always-on="scrollbarAlwayson"
 		:data="fatherList.length > 0 ? fatherList : listData"
 		:header-cell-style="headerCellStyle"
@@ -329,7 +330,7 @@ const getList = () => {
 const tableRowClassName = (row: any, rowIndex: number) => {
 	// console.log(row, rowIndex,'row, rowIndex');
 	if (props.getTableRowClassName) {
-		return props.getTableRowClassName(row);
+		return props.getTableRowClassName(row,rowIndex);
 	} else {
 		return '';
 	}

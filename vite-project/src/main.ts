@@ -5,7 +5,7 @@ import store from './store';
 //引入注册脚本
 import 'virtual:svg-icons-register';
 import SvgIcon from './components/svgIcons/index.vue';
-
+import dictTag from './components/dictTag/index.vue';
 // 全局修改默认样式 elementPlus
 import '@assets/styles/elementPlus.less';
 // 引用公共组件(安装 修改)
@@ -18,7 +18,8 @@ import service from '@/services';
 import * as echarts from 'echarts';
 // 解决V-HTML指令潜在的XSS攻击
 import vueDOMPurifyHTML from 'vue-dompurify-html';
-const app = createApp(App).use(vueDOMPurifyHTML).use(store).use(router).use(configs).use(service).component('svg-icon', SvgIcon);
+const app = createApp(App).use(vueDOMPurifyHTML).use(store).use(router).use(configs).use(service)
+    .component('svg-icon', SvgIcon).component('dict-tag', dictTag);
 app.config.globalProperties.$echarts = echarts;
 installPlugins.install(app);
 app.mount('#app');

@@ -8,10 +8,11 @@ import { config } from '@/configs/index';
 const http1$ = new HttpClient(config.baseUrl);
 export default {
 	// 菜单列表
-	menuList(data: any) {
+	menuList(data:any) {
 		return http1$.request({
 			url: 'system/menu/list',
 			method: 'get',
+			params: data
 		});
 	},
 };

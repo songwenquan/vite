@@ -4,7 +4,6 @@
  * @Desciption:请求service封装总入口
  */
 import { camelCase } from 'lodash';
-const services = {};
 // 使用 Vite 的 import.meta.glob 来匹配所有的 .ts 文件
 const modules = import.meta.glob('./**/*.ts');
 
