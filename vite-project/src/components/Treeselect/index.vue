@@ -165,11 +165,11 @@ const getChildList = async (node: any, resolve: any) => {
 		const dataResolve: any = [];
 		data.map((item: any) => {
 			dataResolve.push({
-				areaName: item.name,
+				areaName: item.name || item.areaName,
 				id: item.id,
 				code: item.code,
-				hasChild: !(item.orgType == '1'),
-				children: null,
+				hasChild: !(item.hasChildren == '1'),
+				children: item.children ? item.children : null,
 			});
 		});
 		resolve(dataResolve);

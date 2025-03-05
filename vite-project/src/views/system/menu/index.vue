@@ -46,6 +46,25 @@
         </el-table-column>
       </el-table>
 		</div>
+    <!-- 添加或修改菜单对话框 -->
+    <el-dialog :title="title" v-model="open" width="680px" append-to-body>
+      <el-form ref="menuRef" :model="form" :rules="rules" label-width="100px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="上级菜单">
+              <Treeselect v-model:searchForm="form" :keyValue="keyValue" :departmentData="menuOptions" :placeholder="'请选择'"
+                          :getChildListFunc="dataChild" @change="changeFn"></Treeselect>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
 	</div>
 </template>
 <script setup lang="ts">
@@ -53,8 +72,9 @@ import { useStoreState, useStoreActions } from '@/store/vuex';
 import SearchForm from '@/components/search-form/index.vue';
 import tableTitle from '@/components/table/tableTitle.vue';
 import {handleTree} from "@/utils/utils";
+import Treeselect from "@/components/Treeselect/index.vue";
 const { proxy } = getCurrentInstance();
-const { list, moreButton, params,refreshTable,isExpandAll,menuList} = toRefs(
+const { list, moreButton, params,refreshTable,isExpandAll,menuList,title,open,form,rules,menuOptions,keyValue} = toRefs(
 	reactive({
 		moreButton: false as boolean, // 是否展示更多按钮
 		params: {}, // 搜索参数
@@ -76,6 +96,16 @@ const { list, moreButton, params,refreshTable,isExpandAll,menuList} = toRefs(
     refreshTable:true,
     isExpandAll:false,
     menuList:[],
+    title:'',
+    open:false,
+    form: {},
+    rules: {
+      menuName: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
+      orderNum: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
+      path: [{ required: true, message: '路由地址不能为空', trigger: 'blur' }]
+    },
+    menuOptions:[],
+    keyValue:['parentId','parentIdName']
 	})
 );
 // 获取当前页面的列表标题
@@ -85,7 +115,7 @@ const storeActions = useStoreActions('dictList', ['getDicListUrl']);
 storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
 const { sys_normal_disable } = toRefs(reactive(useStoreState('dictList', ['sys_normal_disable'])));
 
-// 查询
+// 查询菜单列表
 const onSearch = async () => {
   const {code,data} = await proxy.$api.menu.menuList(params.value);
   if(code === '200'){
@@ -94,6 +124,34 @@ const onSearch = async () => {
     menuList.value = []
   }
 };
+// 查询菜单下拉树结构
+const getTreeselect = async () => {
+  menuOptions.value = []
+  const {code,data} = await proxy.$api.menu.menuList();
+  data.map((item)=>{
+    item.id = item.menuId
+    item.code = item.menuId
+    item.areaName = item.menuName
+  })
+  if(code === '200'){
+    const menu = { id:0,code:0,areaName:'主类目',menuId: 0, menuName: '主类目', children: [] }
+    menu.children = handleTree(data, 'menuId')
+    menuOptions.value.push(menu)
+  }
+}
+const dataChild = (node) => {
+  console.log(node.data.children)
+  node.data.children.forEach(item=>{
+    if(item.children && item.children.length > 0){
+      item.hasChildren = '1'
+    }
+  })
+  return node.data.children
+}
+const changeFn = (val:any) => {
+  form.value.parentId = val.code
+  form.value.parentIdName = val.areaName
+}
 // 展开/折叠操作
 const toggleExpandAll = () => {
   refreshTable.value = false
@@ -108,11 +166,41 @@ const handleUpdate = (item:any) => {
 }
 // 新增
 const handleAdd = (item:any) => {
-  console.log(item);
+  getTreeselect().then(()=>{
+    if (item != null && item.menuId) {
+      form.value.parentId = item.menuId
+    } else {
+      form.value.parentId = 0
+    }
+    open.value = true
+    title.value = '添加菜单'
+  })
 }
 // 删除
 const handleDelete = (item:any) => {
   console.log(item);
+}
+// 取消按钮
+const cancel = () => {
+  open.value = false
+  reset()
+}
+// 表单重置
+const menuRef = ref(null)
+const reset = () => {
+  form.value = {
+    menuId: undefined,
+    parentId: 0,
+    menuName: undefined,
+    icon: undefined,
+    menuType: 'M',
+    orderNum: undefined,
+    isFrame: '1',
+    isCache: '0',
+    visible: '0',
+    status: '0'
+  }
+  menuRef.value.resetFields()
 }
 // 初始化执行方法
 const Initialize = (data: any) => {

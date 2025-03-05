@@ -64,17 +64,7 @@ const viteConfig = defineConfig((mode:ConfigEnv)=> {
         'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
       },
       proxy: {
-        '/bx_xtpt': {
-          target: 'http://172.30.93.230:8899',
-          //target:'http://10.1.203.5:7766',
-          // target:'http://36.140.107.198:28080',
-          secure: false,
-          changeOrigin: true,
-          pathRewrite: {
-            '^/bx_xtpt': ''
-          },
-        },
-        // ...require('./proxy.config')
+        ...require('./proxy.config')
       },
       devMiddleware: {
         writeToDisk: true

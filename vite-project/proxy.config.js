@@ -10,6 +10,8 @@ const proxyArr = [
     context: 'bx_xtpt',
     options: {
       target: 'http://172.30.93.230:8899',
+      //target:'http://10.1.203.5:7766',
+      // target:'http://36.140.107.198:28080',
       ws: true,
       changeOrigin: true,
       pathRewrite: {
