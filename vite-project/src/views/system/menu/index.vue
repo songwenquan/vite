@@ -56,6 +56,152 @@
                           :getChildListFunc="dataChild" @change="changeFn"></Treeselect>
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <el-form-item label="菜单类型" prop="menuType">
+              <el-radio-group v-model="form.menuType">
+                <el-radio value="M">目录</el-radio>
+                <el-radio value="C">菜单</el-radio>
+                <el-radio value="F">按钮</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24"  v-if="form.menuType != 'F'">
+            <el-form-item label="菜单图标" prop="icon">
+              <el-popover placement="bottom-start" :width="540" v-model:visible="showChooseIcon" trigger="click" @show="showSelectIcon">
+                <template #reference>
+                  <el-input v-model="form.icon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>
+                    <template #prefix>
+                      <svg-icon v-if="form.icon" :icon-class="form.icon" class="el-input__icon" style="height: 32px; width: 16px" />
+                      <el-icon v-else style="height: 32px; width: 16px"><search /></el-icon>
+                    </template>
+                  </el-input>
+                </template>
+                <IconSelect ref="iconSelectRef" @selected="selected" :active-icon="form.icon" />
+              </el-popover>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="菜单名称" prop="menuName">
+              <el-input v-model="form.menuName" placeholder="请输入菜单名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="显示排序" prop="orderNum">
+              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType != 'F'">
+            <el-form-item>
+              <template #label>
+                <span>
+                  <el-tooltip content="选择是外链则路由地址需要以`http(s)://`开头" placement="top">
+                    <el-icon><question-filled /></el-icon> </el-tooltip>是否外链
+                </span>
+              </template>
+              <el-radio-group v-model="form.isFrame">
+                <el-radio value="0">是</el-radio>
+                <el-radio value="1">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType != 'F'">
+            <el-form-item prop="path">
+              <template #label>
+                <span>
+                  <el-tooltip content="访问的路由地址，如：`user`，如外网地址需内链访问则以`http(s)://`开头" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  路由地址
+                </span>
+              </template>
+              <el-input v-model="form.path" placeholder="请输入路由地址" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType == 'C'">
+            <el-form-item prop="component">
+              <template #label>
+                <span>
+                  <el-tooltip content="访问的组件路径，如：`system/user/index`，默认在`views`目录下" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  组件路径
+                </span>
+              </template>
+              <el-input v-model="form.component" placeholder="请输入组件路径" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType != 'M'">
+            <el-form-item>
+              <el-input v-model="form.perms" placeholder="请输入权限标识" maxlength="100" />
+              <template #label>
+                <span>
+                  <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasPermi('system:user:list')`)" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  权限字符
+                </span>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType == 'C'">
+            <el-form-item>
+              <el-input v-model="form.query" placeholder="请输入路由参数" maxlength="255" />
+              <template #label>
+                <span>
+                  <el-tooltip content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`' placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  路由参数
+                </span>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType == 'C'">
+            <el-form-item>
+              <template #label>
+                <span>
+                  <el-tooltip content="选择是则会被`keep-alive`缓存，需要匹配组件的`name`和地址保持一致" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  是否缓存
+                </span>
+              </template>
+              <el-radio-group v-model="form.isCache">
+                <el-radio value="0">缓存</el-radio>
+                <el-radio value="1">不缓存</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType != 'F'">
+            <el-form-item>
+              <template #label>
+                <span>
+                  <el-tooltip content="选择隐藏则路由将不会出现在侧边栏，但仍然可以访问" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  显示状态
+                </span>
+              </template>
+              <el-radio-group v-model="form.visible">
+                <el-radio v-for="dict in sys_show_hide" :key="dict.value" :value="dict.value">{{ dict.label }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="form.menuType != 'F'">
+            <el-form-item>
+              <template #label>
+                <span>
+                  <el-tooltip content="选择停用则路由将不会出现在侧边栏，也不能被访问" placement="top">
+                    <el-icon><question-filled /></el-icon>
+                  </el-tooltip>
+                  菜单状态
+                </span>
+              </template>
+              <el-radio-group v-model="form.status">
+                <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{ dict.label }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <template #footer>
@@ -68,13 +214,15 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { ClickOutside as vClickOutside } from 'element-plus'
 import { useStoreState, useStoreActions } from '@/store/vuex';
 import SearchForm from '@/components/search-form/index.vue';
 import tableTitle from '@/components/table/tableTitle.vue';
-import {handleTree} from "@/utils/utils";
+import IconSelect from '@/components/IconSelect/index.vue';
+import {handleTree, recursion} from "@/utils/utils";
 import Treeselect from "@/components/Treeselect/index.vue";
 const { proxy } = getCurrentInstance();
-const { list, moreButton, params,refreshTable,isExpandAll,menuList,title,open,form,rules,menuOptions,keyValue} = toRefs(
+const { list, moreButton, params,refreshTable,isExpandAll,menuList,title,open,form,rules,menuOptions,keyValue,showChooseIcon} = toRefs(
 	reactive({
 		moreButton: false as boolean, // 是否展示更多按钮
 		params: {}, // 搜索参数
@@ -98,23 +246,35 @@ const { list, moreButton, params,refreshTable,isExpandAll,menuList,title,open,fo
     menuList:[],
     title:'',
     open:false,
-    form: {},
+    form: {
+      menuId: undefined,
+      parentId: 0,
+      parentIdName:'主类目',
+      menuName: undefined,
+      icon: undefined,
+      menuType: 'M',
+      orderNum: undefined,
+      isFrame: '1',
+      isCache: '0',
+      visible: '0',
+      status: '0'
+    },
     rules: {
       menuName: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
       orderNum: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
       path: [{ required: true, message: '路由地址不能为空', trigger: 'blur' }]
     },
     menuOptions:[],
-    keyValue:['parentId','parentIdName']
+    keyValue:['parentId','parentIdName'],
+    showChooseIcon:false
 	})
 );
 // 获取当前页面的列表标题
 const { matched } = toRefs(reactive(useStoreState('menu', ['matched'])));
 // 调用store-dictList-actions接口获取当前页面依赖字典值
 const storeActions = useStoreActions('dictList', ['getDicListUrl']);
-storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
-const { sys_normal_disable } = toRefs(reactive(useStoreState('dictList', ['sys_normal_disable'])));
-
+storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable,sys_show_hide' });
+const { sys_normal_disable,sys_show_hide } = toRefs(reactive(useStoreState('dictList', ['sys_normal_disable','sys_show_hide'])));
 // 查询菜单列表
 const onSearch = async () => {
   const {code,data} = await proxy.$api.menu.menuList(params.value);
@@ -152,6 +312,25 @@ const changeFn = (val:any) => {
   form.value.parentId = val.code
   form.value.parentIdName = val.areaName
 }
+const iconSelectRef = ref(null)
+// 展示下拉图标
+const showSelectIcon = () => {
+  iconSelectRef.value.reset()
+  showChooseIcon.value = true
+}
+// 选择图标
+const selected = (name:any) => {
+  form.value.icon = name
+  showChooseIcon.value = false
+}
+// 图标外层点击隐藏下拉列表
+const hideSelectIcon = (event) => {
+  let elem = event.relatedTarget || event.srcElement || event.target || event.currentTarget
+  let className = elem.className
+  if (className !== 'el-input__inner') {
+    showChooseIcon.value = false
+  }
+}
 // 展开/折叠操作
 const toggleExpandAll = () => {
   refreshTable.value = false
@@ -162,7 +341,20 @@ const toggleExpandAll = () => {
 };
 // 修改
 const handleUpdate = (item:any) => {
-  console.log(item);
+  getTreeselect().then(async ()=>{
+    const {code,data} = await proxy.$api.menu.getMenu(item.menuId);
+    if(code === '200'){
+      if(data.parentId === '0'){
+        data.parentIdName = '主类目'
+      }else {
+        data.parentIdName = recursion(menuList.value,data.parentId,['menuId','menuName'])
+      }
+      console.log(data.parentIdName)
+      form.value = data
+      open.value = true
+      title.value = '修改菜单'
+    }
+  })
 }
 // 新增
 const handleAdd = (item:any) => {
@@ -191,6 +383,7 @@ const reset = () => {
   form.value = {
     menuId: undefined,
     parentId: 0,
+    parentIdName:'主类目',
     menuName: undefined,
     icon: undefined,
     menuType: 'M',

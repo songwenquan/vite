@@ -64,7 +64,7 @@ const props = defineProps({
 		default: false,
 	},
 	departmentData: {
-		type: Function || Array,
+    type: [Function, Array],
 		default: null,
 	},
 	getChildListFunc: {

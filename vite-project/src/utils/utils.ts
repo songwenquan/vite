@@ -166,3 +166,15 @@ export function handleTree(data, id, parentId, children) {
 	}
 	return tree
 }
+// 递归数组，根据id获取对应数组元素
+let result = '';
+export const recursion = (list: Array, id: string, fields: Array) => {
+    list.forEach((item) => {
+        if (item[fields[0]] == id) {
+            result = item[fields[1]];
+        } else if (item.children && item.children.length > 0) {
+            recursion(item.children, id, fields);
+        }
+    })
+	return result
+}

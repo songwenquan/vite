@@ -15,4 +15,11 @@ export default {
 			params: data
 		});
 	},
+	// 菜单列表
+	getMenu(data:any) {
+		return http1$.request({
+			url: 'system/menu/' + data,
+			method: 'get',
+		});
+	},
 };
