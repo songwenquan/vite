@@ -26,7 +26,7 @@ export const intialState: stateAppMenu = {
 	visitedViews: [],
 	topNav: true,
 };
-
+// 部分菜单兼容改造
 const children: any = (menus: any, menuUrl: '') => {
 	menus.map((item: any) => {
 		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
@@ -50,6 +50,7 @@ const children: any = (menus: any, menuUrl: '') => {
 		}
 	});
 };
+// 匹配点击菜单的全数据
 let listArray: any = null;
 const routerListFunc = (list: any, urlArray: any) => {
 	list.map((item: any) => {
@@ -110,11 +111,20 @@ export default {
 				const devResponse: any = {
 					errCode: '-1',
 					errMsg: '操作成功',
-					data: response.data,
+					data: [],
 					flag: true,
 				};
-				// 授权菜单二次处理合并
-				const whetherOrNotToFilter = true;
+				response.data.map((item: any) => {
+					if(item.meta.title === '综合菜单'){
+						item.hidden = false
+					}
+				})
+				const lastElement = response.data.pop();
+				if (lastElement !== undefined) {
+					response.data.unshift(lastElement);
+				}
+				// 授权菜单两次处理合并
+				const whetherOrNotToFilter = false;
 				let nMenu: any = [];
 				if (whetherOrNotToFilter) {
 					const resList = await auth.getMenuData();
@@ -122,7 +132,7 @@ export default {
 						menuList(resList.data.children, response.data, nMenu);
 					}
 				}
-				let menu = whetherOrNotToFilter ? nMenu : devResponse.data.concat(nMenu);
+				let menu = whetherOrNotToFilter ? nMenu : devResponse.data.concat(response.data);
 				// 部分菜单兼容改造
 				children(menu);
 				// menu.map((item: any) => {

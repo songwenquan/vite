@@ -58,6 +58,7 @@
 						</el-tooltip>
 					</div>
 				</div>
+        <dict-tag v-else-if="item.type === 'dictTag'" :options="item.options" :value=scope.row[item.code] />
 				<div v-else :class="item.click ? 'cursor-p color-1F75FF' : ''" @click="item.click ? item.click(scope.row) : ''" class="ell">
 					<div v-if="item.format" v-dompurify-html="item.format(item.code, scope.row)"></div>
 					<ex-slot v-else-if="item.render" :render="item.render" :row="scope.row" :index="scope.$index" :column="item" />
@@ -252,6 +253,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+  // 是否处理入参参数
+  paramsFn:{
+    type: Function,
+  },
 });
 const {
 	heights,
@@ -281,8 +286,9 @@ const { expandRowKeys, pager, param, total, listData, select, headerCellStyle } 
 		expandRowKeys: [],
 		pager: {
 			// 分页
+      pageNum:1,
 			pageNo: 1,
-			pageSize: 1,
+			pageSize: 10,
 		},
 		total: 0, // 列表总数
 		listData: [], // 列表数据
@@ -303,11 +309,11 @@ const getList = () => {
 	expandRowKeys.value = [];
 	nextTick(() => {
 		param.value = showPage.value ? Object.assign({}, pager.value, params.value) : params.value;
-		delete (param as any).value.receiveTime;
-		delete (param as any).value.acceptTime;
-		service.value &&
-			api.value &&
-			proxy.$api[service.value][api.value](param.value).then(async (res: any) => {
+    // 是否存在入参自定义
+    if(props.paramsFn){
+      param.value = props.paramsFn(param.value)
+    }
+		service.value && api.value && proxy.$api[service.value][api.value](param.value).then(async (res: any) => {
 				if (res.flag || res.code == '200') {
 					if (props.handleData) {
 						listData.value = props.handleData(res)[0];
@@ -383,6 +389,7 @@ const handleSizeChange = (val: any) => {
 // 翻页事件
 const handleCurrentChange = (val: any) => {
 	pager.value.pageNo = val;
+  pager.value.pageNum = val;
 	getList();
 };
 // 全选勾选列表操作

@@ -15,11 +15,43 @@ export default {
 			params: data
 		});
 	},
-	// 菜单列表
+	// 菜单详情
 	getMenu(data:any) {
 		return http1$.request({
 			url: 'system/menu/' + data,
 			method: 'get',
 		});
 	},
+	// 新增菜单
+	addMenu(data:any) {
+		return http1$.request({
+			url: 'system/menu',
+			method: 'post',
+			data: data,
+			isJson:true
+		});
+	},
+	// 修改菜单
+	updateMenu(data:any) {
+		return http1$.request({
+			url: 'system/menu',
+			method: 'put',
+			data: data,
+			isJson:true
+		});
+	},
+	// 删除菜单
+	delMenu(data:any) {
+		return http1$.request({
+			url: 'system/menu/' + + data,
+			method: 'delete'
+		});
+	},
+	// 查询字典类型列表
+	listType(data:any) {
+		return http1$.request({
+			url: '/system/dict/type/list' + data,
+			method: 'get',
+		})
+	}
 };

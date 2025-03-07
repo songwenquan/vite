@@ -59,6 +59,14 @@ export function time(value: any, arr: any, code: any) {
 			arr.value[code + 'Start'] = '';
 			arr.value[code + 'End'] = '';
 		}
+	}else if(Array.isArray(code)){
+		if (value) {
+			arr.value[code[0]] = Moment(value[0]).format('YYYY-MM-DD');
+			arr.value[code[1]] = Moment(value[1]).format('YYYY-MM-DD');
+		} else {
+			arr.value[code[0]] = '';
+			arr.value[code[1]] = '';
+		}
 	}
 }
 // 导出功能

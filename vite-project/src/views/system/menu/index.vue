@@ -349,7 +349,6 @@ const handleUpdate = (item:any) => {
       }else {
         data.parentIdName = recursion(menuList.value,data.parentId,['menuId','menuName'])
       }
-      console.log(data.parentIdName)
       form.value = data
       open.value = true
       title.value = '修改菜单'
@@ -370,7 +369,20 @@ const handleAdd = (item:any) => {
 }
 // 删除
 const handleDelete = (item:any) => {
-  console.log(item);
+  proxy.$ElMessage.confirm(
+      '是否确认删除名称为"' + item.menuName + '"的数据项?',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+      })
+      .then(async ()=>{
+        const {code} = await proxy.$api.menu.delMenu(item.menuId);
+        if(code === '200'){
+          proxy.$message.success('删除成功')
+          await onSearch()
+        }
+      })
+      .catch(() => {})
 }
 // 取消按钮
 const cancel = () => {
@@ -394,6 +406,32 @@ const reset = () => {
     status: '0'
   }
   menuRef.value.resetFields()
+}
+// 提交保存
+const submitForm = () => {
+  proxy.$refs['menuRef'].validate(async valid => {
+    if (valid) {
+      if (form.value.menuId != undefined) {
+        const param = JSON.parse(JSON.stringify(form.value))
+        delete param.parentIdName
+        const {code} = await proxy.$api.menu.updateMenu(param);
+        if(code === '200'){
+          proxy.$message.success('修改成功')
+          open.value = false
+          await onSearch()
+        }
+      } else {
+        const param = JSON.parse(JSON.stringify(form.value))
+        delete param.parentIdName
+        const {code} = await proxy.$api.menu.addMenu(param);
+        if(code === '200'){
+          proxy.$message.success('新增成功')
+          open.value = false
+          await onSearch()
+        }
+      }
+    }
+  })
 }
 // 初始化执行方法
 const Initialize = (data: any) => {

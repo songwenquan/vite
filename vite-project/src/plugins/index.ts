@@ -4,7 +4,7 @@
  * @Desciption:安装插件
  */
 // 全局安装element-plus
-import ElementPlus, { ElMessage } from 'element-plus';
+import ElementPlus, { ElMessage,ElMessageBox  } from 'element-plus';
 import store from '@/store';
 import i18n from '@/i18n';
 import 'element-plus/dist/index.css';
@@ -28,6 +28,8 @@ export const installPlugins = {
 		app.config.globalProperties.$t = i18n.global.t;
 		// 全局挂载时间组件
 		app.config.globalProperties.$moment = Moment;
+		// 全局挂载确认提示
+		app.config.globalProperties.$ElMessage = ElMessageBox ;
 		// 默认提示
 		app.config.globalProperties.$message = function (msg: any, duration: number) {
 			return ElMessage({

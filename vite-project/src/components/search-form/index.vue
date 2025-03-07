@@ -33,7 +33,7 @@ code映射字段 * @type 1.文本框 2.下拉框 3.部门tree 4.时间范围 */
 						<el-date-picker
 							v-model="searchForm[item.code]"
 							type="daterange"
-							@change="valChange($event, item.func, item.code)"
+							@change="valChange($event, item.func,item.codeType || item.code)"
 							:clearable="true"
 							range-separator="至"
 							start-placeholder="开始日期"
