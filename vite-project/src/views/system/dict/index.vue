@@ -23,7 +23,7 @@
         </template>
       </tableTitle>
       <TableList ref="tableList" :multiple="true" :border="true" :params="params" service="menu" :show-page="true"
-                 api="listType" :paramsFn="paramsFn" :key-list="keyList">
+                 api="listType" :paramsFn="paramsFn" :key-list="keyList" 	:btnObj="btnObj" row-key="dictId">
       </TableList>
     </div>
   </div>
@@ -42,8 +42,8 @@ const routerPush = (item:any) => {
 const storeActions = useStoreActions('dictList', ['getDicListUrl']);
 storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
 const { sys_normal_disable } = toRefs(reactive(useStoreState('dictList', ['sys_normal_disable'])));
-
-const { list,params, moreButton,multiple,keyList} = toRefs(
+const tableList = ref(null);
+const { list,params, moreButton,multiple,keyList,btnObj} = toRefs(
     reactive({
       moreButton: false as boolean, // 是否展示更多按钮
       params: {}, // 搜索参数
@@ -97,7 +97,29 @@ const { list,params, moreButton,multiple,keyList} = toRefs(
           type:'dictTag',
           options:sys_normal_disable
         },
-      ]
+        {
+          code: 'remark',
+          name: '备注',
+        },
+        {
+          code: 'createTime',
+          name: '创建时间',
+        },
+      ],
+      btnObj:{
+        name: '操作',
+        fiexd: false,
+        list: [
+          {
+            name: '修改',
+            callBackName: 'handleUpdate',
+          },
+          {
+            name: '删除',
+            callBackName: 'handleDelete',
+          },
+        ],
+      }
     })
 );
 // 入参二次处理
@@ -142,6 +164,7 @@ const handleAdd = () => {
 }
 // 删除
 const handleDelete = () => {
+  console.log( (tableList.value as any).select)
 }
 // 导出
 const handleExport = () => {
@@ -151,7 +174,6 @@ const handleRefreshCache = () => {
 }
 
 // 查询菜单列表
-const tableList = ref(null);
 const onSearch = () => {
   (tableList.value as any).init();
 };
@@ -165,6 +187,9 @@ const updateList = (data: any) => {
     item.value = data[item.code];
   });
 };
+watch(()=>tableList.value?.select,(newV)=>{
+  multiple.value = newV.length > 0 ? false : true
+},{deep:true})
 onMounted(() => {
   onSearch();
 });

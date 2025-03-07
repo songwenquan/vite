@@ -31,7 +31,7 @@ const children: any = (menus: any, menuUrl: '') => {
 	menus.map((item: any) => {
 		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
 		item.menuName = item.meta.title;
-		item.meta.keepAlive = false;
+		item.meta.keepAlive = item.name.toLocaleLowerCase() === item.path.toLocaleLowerCase() ? true : false;
 		item.meta.fullScreen = 'TCB';
 		item.meta.requireAuth = true;
 		item.meta.nobread = true;
