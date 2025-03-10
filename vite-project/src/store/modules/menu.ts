@@ -3,10 +3,9 @@
  * @Date: 2023/10/25 18:05
  * @Desciption:菜单store配置
  */
-// @ts-ignore
-import waterData from '$public/nav.json';
+
 import { searchTreeL, handleAuthMenu, searchTree } from '@/utils/arithmetic';
-import { isHttp, loadView } from '@/utils/utils';
+import { loadView } from '@/utils/utils';
 import auth from '@/services/modules/auth.service';
 import router from '@/router/index';
 import { url } from '@/utils/regexp';
@@ -203,5 +202,5 @@ export default {
 		MUT_DeleteMenuvisitedViews(state: any, urlArray: any) {
 			state.visitedViews = state.visitedViews.filter((item: any) => item.menuUrl !== urlArray);
 		},
-	},
+	}
 };

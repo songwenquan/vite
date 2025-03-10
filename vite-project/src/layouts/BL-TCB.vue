@@ -40,11 +40,12 @@ import TopNav from '@/components/top-nav/index.vue';
 import { childrenStr } from '@/utils/utils';
 const router = useRouter();
 const route = useRoute();
-let { isCollapse, levelList, leftMenu } = toRefs(
+let { isCollapse, levelList, leftMenu, MeunLists} = toRefs(
 	reactive({
 		isCollapse: false as boolean, // 展开收起状态
 		levelList: [],
-		leftMenu: []
+		leftMenu: [],
+    MeunLists: []
 	})
 );
 // menu store-state-menu
@@ -66,9 +67,14 @@ const menuItemSelect = (val: any, openType: any) => {
 const menuList = useStoreActions('menu', ['ACT_SetMatched', 'ACT_SetlevelList']);
 // 判断是否存在子集url
 // 存储面包屑导航数据
+MeunLists.value = JSON.parse(JSON.stringify(menuArray.value));
+router.options.routes.forEach((item: any) => {
+  MeunLists.value.push({...item})
+})
+
 const levelListFunc = () => {
 	const { path } = route;
-	(menuArray as any).value.map((item: any) => {
+	(MeunLists as any).value.map((item: any) => {
 		if (item.menuUrl === path) {
 			levelList.value = item;
 			item.show = true;
@@ -76,12 +82,15 @@ const levelListFunc = () => {
 			menuList.ACT_SetMatched({ menuName: item.menuName, menuUrl: item.menuUrl });
 		} else {
 			item.show = '';
-			menuArrayChildren(item, item.children, path);
+      if(item.children){
+        menuArrayChildren(item, item.children, path);
+      }
 		}
 	});
+  console.log()
 	// 数据处理  如果多级菜单 递归获取父级
 	if ((levelList as any).show !== true) {
-		const parentDirectory: any = levelListChild(menuArray.value, path);
+		const parentDirectory: any = levelListChild(MeunLists.value, path);
 		// 根据url匹配  重新赋值name以及赋值路由中部分字段
 		parentDirectory.map((item: any) => {
 			route.matched.map((items) => {
@@ -97,7 +106,7 @@ const levelListFunc = () => {
 				}
 			});
 			// 因菜单和路由名称可能存在变差  故取菜单数据进行赋值
-			(menuArray as any).value.map((items: any) => {
+			(MeunLists as any).value.map((items: any) => {
 				if (items.menuUrl === item.menuUrl) {
 					item.menuName = items.menuName;
 				} else {

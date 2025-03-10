@@ -34,10 +34,7 @@ import { useStoreState,useStoreActions} from '@/store/vuex';
 import {time} from "@/utils/utils";
 import tableTitle from "@/components/table/tableTitle.vue";
 import TableList from "@/components/table/tableList.vue";
-// 点击字典类型详情
-const routerPush = (item:any) => {
-  console.log(item)
-}
+import router from "@/router";
 // 调用store-dictList-actions接口获取当前页面依赖字典值
 const storeActions = useStoreActions('dictList', ['getDicListUrl']);
 storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
@@ -89,7 +86,11 @@ const { list,params, moreButton,multiple,keyList,btnObj} = toRefs(
         {
           code: 'dictType',
           name: '字典类型',
-          click:routerPush
+          click:(item:any) => {
+            router.push(
+                { path: '/system/dict-data/index', query: {dictId: item.dictId}}
+            );
+          }
         },
         {
           code: 'status',

@@ -35,6 +35,20 @@ for (const path in modules) {
 		routerModule = routerModule.concat(...modules[path].default);
 	}
 }
+// 部分菜单兼容改造
+const children: any = (menus: any, menuUrl: '') => {
+	menus.map((item: any) => {
+		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
+		item.menuName = item.meta?.title;
+		if (item.children?.length > 0) {
+			children(item.children, item.menuUrl);
+		} else {
+			item.children = [];
+		}
+	});
+};
+const routerList = [...routerModule]
+children(routerList, '');
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	scrollBehavior: (to, from, savePosition) => {
@@ -75,15 +89,17 @@ async function menusFunc(to: RouteLocationNormalized, next: NavigationGuardNext)
 			ElMessage.error({ message: menu.msg, duration: 3000 });
 		}
 	}
+	let routesList =[...router.options.routes]
 	menus.forEach((routes: any) => {
 		if (!isHttp(routes.path)) {
 			router.addRoute({ ...routes }); // 动态添加可访问路由表
+			routesList.push({ ...routes })
 		}
 	});
 	if (to.path === '/') {
 		const url = childrenStr(menus, 1);
 		fullScreen(to, next, url);
-	} else if (to.path !== '/permissionMenu' && checkPermission('menuUrl', to.path, menus) === -1) {
+	} else if (to.path !== '/permissionMenu' && checkPermission('menuUrl', to.path, routesList) === -1) {
 		// 没有该菜单权限
 		ElMessage.closeAll();
 		ElMessage.error({ message: '暂无该菜单权限，请重新扫码登录', duration: 3000 });
