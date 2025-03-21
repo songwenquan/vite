@@ -35,20 +35,6 @@ for (const path in modules) {
 		routerModule = routerModule.concat(...modules[path].default);
 	}
 }
-// 部分菜单兼容改造
-const children: any = (menus: any, menuUrl: '') => {
-	menus.map((item: any) => {
-		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
-		item.menuName = item.meta?.title;
-		if (item.children?.length > 0) {
-			children(item.children, item.menuUrl);
-		} else {
-			item.children = [];
-		}
-	});
-};
-const routerList = [...routerModule]
-children(routerList, '');
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	scrollBehavior: (to, from, savePosition) => {

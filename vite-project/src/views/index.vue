@@ -32,7 +32,7 @@ const { noTagsView, nobread } = toRefs(
 );
 
 watchEffect(() => {
-	console.log('路由---', router.currentRoute.value);
+	// console.log('路由---', router.currentRoute.value);
 	// 根据路由配置是否展示面包屑
 	if (router.currentRoute.value.meta && router.currentRoute.value.meta.nobread === true) {
 		nobread.value = true;

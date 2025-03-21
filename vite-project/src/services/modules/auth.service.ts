@@ -42,4 +42,10 @@ export default {
 			method: 'get',
 		});
 	},
+	getType(data: any) {
+		return http1$.request({
+			url: '/system/dict/type/' + data,
+			method: 'get',
+		});
+	},
 };

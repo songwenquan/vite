@@ -43,7 +43,7 @@ export default {
 	// 删除菜单
 	delMenu(data:any) {
 		return http1$.request({
-			url: 'system/menu/' + + data,
+			url: 'system/menu/' +  data,
 			method: 'delete'
 		});
 	},
@@ -52,6 +52,20 @@ export default {
 		return http1$.request({
 			url: '/system/dict/type/list' + data,
 			method: 'get',
+		})
+	},
+	// 查询字典数据列表
+	listData(data:any) {
+		return http1$.request({
+			url: '/system/dict/data/list' + data,
+			method: 'get',
+		})
+	},
+	// 查询字典类型详细
+	getType(dictId:any) {
+		return http1$.request({
+			url: '/system/dict/type/' + dictId,
+			method: 'get'
 		})
 	}
 };

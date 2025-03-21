@@ -80,6 +80,26 @@ export default {
 				});
 			}
 		},
+		getDicListUrl2({ state, commit }: { state: any; commit: any }, typeCodeStr: any) {
+			if (typeCodeStr) {
+				const { proxy } = getCurrentInstance() as any; // this
+				const typeCodes = typeCodeStr.type.split(',');
+				typeCodes.forEach((dataType: any) => {
+					state[dataType] = state[dataType] ? state[dataType] : [];
+					if (!state[dataType].length) {
+						// 加载过的字典不再重新获取（刷新除外）
+						proxy.$api.auth['getType'](dataType).then((config: any) => {
+							if (config.code == '200') {
+								commit('SET_TYPE_CODEUrl', {
+									dataType: dataType,
+									data: config.data,
+								});
+							}
+						});
+					}
+				});
+			}
+		},
 	},
 	mutations: {
 		SET_TYPE_CODE(state: any, info: any) {
@@ -106,8 +126,8 @@ export default {
 			state[info.dataType] = [];
 			state[info.dataType] = info.data.map((a: any) => {
 				return {
-					label: a.label || a.dictLabel,
-					value: a.value || a.dictValue,
+					label: a.label || a.dictLabel || a.dictName,
+					value: a.value || a.dictValue || a.dictType,
 					elTagType: a.listClass,
 					elTagClass: a.cssClass,
 					...a,

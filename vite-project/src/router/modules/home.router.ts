@@ -5,6 +5,8 @@
  * fullScreen   TCB 左侧列表布局   TCB-TOP 顶部菜单列表布局  currency 自定义布局  noTagsView 是否展示已点击菜单序列  affix 是否支持删除
  * 严格按照写法编写路由
  */
+import {loadView} from "@/utils/utils";
+
 const Layout = import('@/views/index.vue')
 export const constantRoutes = [
 	{
@@ -25,17 +27,32 @@ export const constantRoutes = [
 				name: 'Data',
 				meta: {
 					title: '字典数据',
-					fullScreen:'TCB',
-					keepAlive:false,
-					requireAuth:true,
-					nobread:true,
-					noTagsView:true,
-					isHideAside:true,
-					affix:true,
 					activeMenu: '/system/dict'
 				}
 			}
 		]
 	},
 ];
+// 菜单配置项兼容改造
+const children: any = (menus: any, menuUrl: '') => {
+	menus.map((item: any) => {
+		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
+		if(item.meta){
+			item.menuName = item.meta.title;
+			item.meta.keepAlive = item.name?.toLocaleLowerCase() === item.path?.toLocaleLowerCase() ? true : false;
+			item.meta.fullScreen = item.meta.fullScreen != undefined ? item.meta.fullScreen : 'TCB';
+			item.meta.requireAuth = item.meta.requireAuth != undefined ? item.meta.requireAuth : true;
+			item.meta.nobread = item.meta.nobread != undefined ? item.meta.nobread : true;
+			item.meta.noTagsView = item.meta.noTagsView != undefined  ? item.meta.noTagsView : true;
+			item.meta.isHideAside = item.meta.isHideAside != undefined ? item.meta.isHideAside : true;
+			item.meta.affix = item.meta.affix != undefined ? item.meta.affix : false;
+		}
+		if (item.children?.length > 0) {
+			children(item.children, item.menuUrl);
+		} else {
+			item.children = [];
+		}
+	});
+};
+children(constantRoutes, '');
 export default constantRoutes;

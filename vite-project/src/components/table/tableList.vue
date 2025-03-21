@@ -58,7 +58,7 @@
 						</el-tooltip>
 					</div>
 				</div>
-        <dict-tag v-else-if="item.type === 'dictTag'" :options="item.options" :value=scope.row[item.code] />
+        <dict-tag v-else-if="item.type === 'dictTag'" :options="item.itemTag ? [scope.row] : item.options" :value=scope.row[item.code] />
 				<div v-else :class="item.click ? 'cursor-p color-1F75FF' : ''" @click="item.click ? item.click(scope.row) : ''" class="ell">
 					<div v-if="item.format" v-dompurify-html="item.format(item.code, scope.row)"></div>
 					<ex-slot v-else-if="item.render" :render="item.render" :row="scope.row" :index="scope.$index" :column="item" />

@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import SearchForm from "@/components/search-form/index.vue";
 import { useStoreState,useStoreActions} from '@/store/vuex';
-import {time} from "@/utils/utils";
+import {time,tansParams} from "@/utils/utils";
 import tableTitle from "@/components/table/tableTitle.vue";
 import TableList from "@/components/table/tableList.vue";
 import router from "@/router";
@@ -88,7 +88,7 @@ const { list,params, moreButton,multiple,keyList,btnObj} = toRefs(
           name: '字典类型',
           click:(item:any) => {
             router.push(
-                { path: '/system/dict-data/index', query: {dictId: item.dictId}}
+                { path: '/system/dict-data/index', state: {dictId: item.dictId}}
             );
           }
         },
@@ -124,27 +124,6 @@ const { list,params, moreButton,multiple,keyList,btnObj} = toRefs(
     })
 );
 // 入参二次处理
-const tansParams = (params) => {
-  let result = ''
-  for (const propName of Object.keys(params)) {
-    const value = params[propName]
-    let part = encodeURIComponent(propName) + '='
-    if (value !== null && value !== '' && typeof value !== 'undefined') {
-      if (typeof value === 'object') {
-        for (const key of Object.keys(value)) {
-          if (value[key] !== null && value[key] !== '' && typeof value[key] !== 'undefined') {
-            let params = propName + '[' + key + ']'
-            let subPart = encodeURIComponent(params) + '='
-            result = result === '' ? subPart + encodeURIComponent(value[key]) : result + '&' + subPart + encodeURIComponent(value[key])
-          }
-        }
-      } else {
-        result = result === '' ? part + encodeURIComponent(value) : result + '&' + part + encodeURIComponent(value)
-      }
-    }
-  }
-  return result
-}
 const paramsFn = (data:any) => {
   data.params = {
     beginTime:data.beginTime,
@@ -154,7 +133,6 @@ const paramsFn = (data:any) => {
   delete data.dateRange
   delete data.beginTime
   delete data.endTime
-  console.log('1')
   data = tansParams(data)
   return '?' + data
 }

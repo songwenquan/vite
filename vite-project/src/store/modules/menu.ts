@@ -194,8 +194,13 @@ export default {
 				let menus = router.options.routes.concat(state.menu);
 				await routerListFunc(menus, urlArray.path);
 				if (listArray) {
+					if(urlArray.query && Object.keys(urlArray.query).length !== 0){
+						listArray.query = urlArray.query;
+					}
 					state.visitedViews.push(listArray);
 				}
+			}else {
+				arr[0].query = urlArray.query;
 			}
 		},
 		// 删除某个菜单
