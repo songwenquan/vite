@@ -92,7 +92,7 @@ const handleSelect = (index: any) => {
 		item = findItemByUrl(props.menuArray, index, {});
 	}
 	activeIndex.value = index;
-	emit('nav-item-select', index, item.openType);
+	emit('nav-item-select', index, item);
 };
 const findItemByUrl = (array: any, url: any, matchLast: any) => {
 	for (let i = 0; i < array.length; i++) {

@@ -8,9 +8,9 @@
 				:key="tag.menuUrl"
 				:data-path="tag.menuUrl"
 				:class="isActive(tag) ? 'active' : ''"
-				:to="{ path: tag.menuUrl, query: tag.query, fullPath: tag.fullPath }"
+				:to="{ path: tag.menuUrl, state: tag.query, fullPath: tag.fullPath }"
 				:style="activeStyle(tag)"
-				@click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+				@click="openViewsMenu(tag)"
 				@contextmenu.prevent="openMenu(tag, $event, index)"
 			>
 				{{ tag.meta?.title }}
@@ -49,6 +49,21 @@ const { visible, left, top, selectedTag, isFirstView, isLastView, tagIndex } = t
 		tagIndex: '',
 	})
 );
+// 点击打开
+const openViewsMenu = (tag:any) => {
+  if(tag.query){
+    let state = typeof tag.query === 'string' ? JSON.parse(tag.query) : tag.query;
+    router.push({
+      path: tag.menuUrl,
+      state: state,
+    });
+  }else{
+    router.push({
+      path: tag.menuUrl
+    });
+  }
+  console.log(tag)
+}
 // 判断当前path是否相同url path
 const isActive = (r: any) => {
 	return r.menuUrl === route.path;
@@ -76,7 +91,7 @@ const closeSelectedTag = (view: any) => {
 	} else {
 		router.push({
 			path: visitedViews.value[0].menuUrl,
-			query: query,
+			state: query,
 		});
 	}
 };
@@ -87,7 +102,7 @@ const closeOthersTags = () => {
 	});
 	router.push({
 		path: selectedTag.value.menuUrl,
-		query: selectedTag.value.query ? JSON.stringify(selectedTag.value.query) : undefined,
+    state: selectedTag.value.query ? JSON.stringify(selectedTag.value.query) : undefined,
 	});
 };
 // 全部关闭
@@ -111,7 +126,7 @@ const closeLeftTags = () => {
 			if (indexs < tagIndex.value) {
 				router.push({
 					path: url,
-					query: query,
+          state: query,
 				});
 			}
 		}
@@ -128,7 +143,7 @@ const closeRightTags = () => {
 			if (indexs > tagIndex.value) {
 				router.push({
 					path: url,
-					query: query,
+					state: query,
 				});
 			}
 		}
@@ -145,7 +160,7 @@ const $closePage = () => {
 	} else {
 		router.push({
 			path: visitedViews.value[visitedViews.value.length - 1].menuUrl,
-			query: query,
+			state: query,
 		});
 	}
 };

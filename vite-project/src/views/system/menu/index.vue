@@ -409,7 +409,7 @@ const reset = () => {
 }
 // 提交保存
 const submitForm = () => {
-  proxy.$refs['menuRef'].validate(async valid => {
+  menuRef.value.validate(async valid => {
     if (valid) {
       if (form.value.menuId != undefined) {
         const param = JSON.parse(JSON.stringify(form.value))
@@ -417,7 +417,7 @@ const submitForm = () => {
         const {code} = await proxy.$api.menu.updateMenu(param);
         if(code === '200'){
           proxy.$message.success('修改成功')
-          open.value = false
+          cancel()
           await onSearch()
         }
       } else {
@@ -426,7 +426,7 @@ const submitForm = () => {
         const {code} = await proxy.$api.menu.addMenu(param);
         if(code === '200'){
           proxy.$message.success('新增成功')
-          open.value = false
+          cancel()
           await onSearch()
         }
       }

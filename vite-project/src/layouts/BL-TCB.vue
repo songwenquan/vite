@@ -56,11 +56,16 @@ const actLogout = () => {
 	userList.ACT_Logout();
 };
 // 菜单点击跳转
-const menuItemSelect = (val: any, openType: any) => {
-	if (openType === '2') {
+const menuItemSelect = (val: any, item: any) => {
+	if (item.openType === '2') {
 		window.open(val);
 	} else {
-		router.push({ path: val });
+    if(item.query){
+      let state = typeof item.query === 'string' ? JSON.parse(item.query) : item.query;
+      router.push({ path: val,state:state});
+    }else {
+      router.push({ path: val });
+    }
 	}
 };
 // 获取menu store-actions方法

@@ -70,13 +70,14 @@ export function time(value: any, arr: any, code: any) {
 	}
 }
 // 导出功能
-export function exportExcel(params: any, service: any, api: any, menuName: any, proxy: any) {
+export function exportExcel(params: any, service: any, api: any, menuName: any, proxy: any,blobs:any) {
 	proxy.$api[service][api](params).then(async (res: any) => {
-		const blob = new Blob([res], { type: 'application/vnd.ms-excel;charset=UTF-8' });
+		const blob = new Blob([res], { type: blobs });
+		// const blob = new Blob([res], { type: 'application/vnd.ms-excel;charset=UTF-8' });
 		const link = document.createElement('a');
 		link.style.display = 'none';
 		link.href = URL.createObjectURL(blob);
-		link.download = menuName + '.xls'; // 这里是文件名
+		link.download = menuName; // 这里是文件名
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);

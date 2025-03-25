@@ -165,7 +165,7 @@ const updateList = (data: any) => {
   });
 };
 const getTypes = async (dictId:string)=>{
-  const {code,data} = await proxy.$api.menu.getType(dictId)
+  const {code,data} = await proxy.$api.auth.getType(dictId)
   if(code === '200'){
     params.value.dictType = data.dictType
     onSearch();

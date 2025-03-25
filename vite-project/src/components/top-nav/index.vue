@@ -137,7 +137,7 @@ const handleSelect = (key) => {
 		const routeMenu = childrenMenus.value.find((item) => item.path === key);
 		if (routeMenu && routeMenu.query && Object.keys(routeMenu.query).length !== 0) {
 			let query = JSON.parse(routeMenu.query);
-			router.push({ path: key, query: query });
+			router.push({ path: key, state: query });
 		} else {
 			router.push({ path: key });
 		}
