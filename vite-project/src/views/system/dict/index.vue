@@ -142,6 +142,7 @@ const { list,params, moreButton,multiple,keyList,btnObj,open,form,rules,title} =
           },
           {
             name: '删除',
+            type:'danger',
             callBackName: 'handleDelete',
           },
         ],
@@ -267,7 +268,9 @@ const handleExport = () => {
 // 刷新缓存
 const handleRefreshCache = async () => {
   const {code} = await proxy.$api.menu.refreshCache();
-  proxy.$message.success('刷新成功');
+  if (code === '200'){
+    proxy.$message.success('刷新成功');
+  }
 }
 // 查询菜单列表
 const onSearch = () => {

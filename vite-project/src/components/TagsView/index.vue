@@ -62,7 +62,6 @@ const openViewsMenu = (tag:any) => {
       path: tag.menuUrl
     });
   }
-  console.log(tag)
 }
 // 判断当前path是否相同url path
 const isActive = (r: any) => {
@@ -83,7 +82,7 @@ const activeStyle = (tag: any) => {
 const closeSelectedTag = (view: any) => {
 	MUT_DeleteMenuvisitedViews(view.menuUrl);
 	let query = null;
-	if (visitedViews.value[0].query && Object.keys(visitedViews.value[0].query).length !== 0) {
+	if (visitedViews.value[0] && visitedViews.value[0].query && Object.keys(visitedViews.value[0].query).length !== 0) {
 		query = JSON.parse(visitedViews.value[0].query);
 	}
 	if (visitedViews.value.length === 0) {

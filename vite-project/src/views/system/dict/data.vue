@@ -24,7 +24,8 @@
         </template>
       </tableTitle>
       <TableList ref="tableList" :multiple="true" :border="true" :params="params" service="menu" :show-page="true"
-                 api="listData" :paramsFn="paramsFn" :key-list="keyList" 	:btnObj="btnObj" row-key="dictCode" :handle-data="handleData">
+                 api="listData" :paramsFn="paramsFn" :key-list="keyList" 	:btnObj="btnObj" row-key="dictCode" :handle-data="handleData"
+                 @handleClick="handleClick">
       </TableList>
     </div>
   </div>
@@ -32,18 +33,16 @@
 <script setup lang="ts">
 import SearchForm from "@/components/search-form/index.vue";
 import { useStoreState, useStoreActions } from '@/store/vuex';
-import { useRoute } from 'vue-router';
 import tableTitle from '@/components/table/tableTitle.vue';
 import TableList from "@/components/table/tableList.vue";
 import {tansParams} from "@/utils/utils";
 const { proxy } = getCurrentInstance() as any; // this
-const route = useRoute();
 const tableList = ref(null);
 // 调用store-dictList-actions接口获取当前页面依赖字典值
 const storeActions = useStoreActions('dictList', ['getDicListUrl2','getDicListUrl']);
 storeActions.getDicListUrl2({ url: '', type: 'optionselect' });
 storeActions.getDicListUrl({ url: '', type: 'sys_normal_disable' });
-const { optionselect,sys_normal_disable } = toRefs(reactive(useStoreState('dictList', ['optionselect','sys_normal_disable'])));
+const {sys_normal_disable } = toRefs(reactive(useStoreState('dictList', [,'sys_normal_disable'])));
 const {list, params, moreButton,multiple,keyList,btnObj} = toRefs(
     reactive({
       moreButton: false as boolean, // 是否展示更多按钮
@@ -110,6 +109,17 @@ const {list, params, moreButton,multiple,keyList,btnObj} = toRefs(
       btnObj: {
         name: '操作',
         fiexd: false,
+        list: [
+          {
+            name: '修改',
+            callBackName: 'handleUpdate',
+          },
+          {
+            name: '删除',
+            type:'danger',
+            callBackName: 'handleDelete',
+          },
+        ],
       }
     })
 );
@@ -130,6 +140,31 @@ const handleData = (row:any)=>{
 }
 // 获取当前页面的列表标题
 const { matched } = toRefs(reactive(useStoreState('menu', ['matched'])));
+// 操作按钮list
+const buttonList = {
+  // 修改
+  handleUpdate(row:any){
+    form.value = row
+    open.value = true
+    title.value = '修改字典类型'
+  },
+  // 删除
+  handleDelete(row:any){
+    proxy.$ElMessage.confirm('是否确认删除名称为"' + row.dictName + '"的数据项?',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+        })
+        .then(async ()=>{
+          const {code} = await proxy.$api.menu.delType(row.dictId);
+          if(code === '200'){
+            proxy.$message.success('删除成功')
+            await onSearch()
+          }
+        })
+        .catch(() => {})
+  }
+};
 // 新增
 const handleAdd = () => {
 
@@ -157,6 +192,10 @@ const onSearch = () => {
 // 初始化执行方法
 const Initialize = (data: any) => {
   params.value = data;
+};
+// 列表按钮点击
+const handleClick = (item: any, callBackName: any, index: any, scope: any) => {
+  (buttonList as any)[callBackName](item, index, scope);
 };
 // 数据更新修改list value数据源
 const updateList = (data: any) => {
