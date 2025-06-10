@@ -16,9 +16,12 @@ export default {
 	},
 	// 获取系统菜单
 	getgetRoutersData() {
+		const jsonPath = import.meta.env.MODE === 'production' ? '/router.json' : '../router.json';
 		return http1$.request({
-			url: '/uap/getRouters',
-			method: 'get',
+			// url: '/uap/getRouters',
+			// method: 'get',
+			url: jsonPath,
+			method: 'get'
 		});
 	},
 	// 获取uap配置权限菜单

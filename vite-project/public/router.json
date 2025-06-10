@@ -1,0 +1,43 @@
+{
+  "code": "200",
+  "msg": "操作成功",
+  "data": [
+    {
+      "name": "System",
+      "path": "/system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "noCache": false
+      },
+      "children": [
+        {
+          "name": "Menu",
+          "path": "menu",
+          "hidden": false,
+          "component": "system/menu/index",
+          "meta": {
+            "title": "菜单管理",
+            "icon": "tree-table",
+            "noCache": true
+          }
+        },
+        {
+          "name": "Dict",
+          "path": "dict",
+          "hidden": false,
+          "component": "system/dict/index",
+          "meta": {
+            "title": "字典管理",
+            "icon": "dict",
+            "noCache": true
+          }
+        }
+      ]
+    }
+  ]
+}

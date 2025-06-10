@@ -12,10 +12,10 @@ code映射字段 * @type 1.文本框 2.下拉框 3.部门tree 4.时间范围 */
 					<el-form-item :label="item.name + ':'" v-if="item.type === 2">
 						<el-select v-model="searchForm[item.code]" :multiple="item.multiple || false" :placeholder="item.placeholder || '请选择'" clearable>
 							<el-option
-								:label="item.label"
-								:value="item.value"
-								v-for="(item, index) in item.dictList ? item.dictList : dictGetter(item.dictKey)"
-								:key="index"
+                  v-for="(items,indexs) in item.dictList ? item.dictList : dictGetter(item.dictKey)"
+								:label="items.label"
+								:value="items.value"
+								:key="indexs"
 							></el-option>
 						</el-select>
 					</el-form-item>

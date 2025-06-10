@@ -98,16 +98,23 @@ export function children(menus: any, type: any) {
 let redirect = '';
 // 判断是否存在子集url（拼接式）
 export function childrenStr(menus: any, type: any) {
-	if (menus[0].children && menus[0].children.length > 0) {
+	// Filter out hidden menus
+	const visibleMenus = menus.filter((menu: { hidden?: boolean; path: string; children?: any[] }) => !menu.hidden);
+	if (visibleMenus.length === 0) return redirect;
+	if (visibleMenus[0].children && visibleMenus[0].children.length > 0) {
+		// Filter children that are not hidden
+		visibleMenus[0].children = visibleMenus[0].children.filter((child: { hidden?: boolean; path: string; children?: any[] }) => !child.hidden);
 		if (type == 1) {
 			redirect = '';
-			redirect = redirect + menus[0].path;
+			redirect = redirect + visibleMenus[0].path;
 		} else {
-			redirect = redirect + '/' + menus[0].path;
+			redirect = redirect + '/' + visibleMenus[0].path;
 		}
-		childrenStr(menus[0].children, '');
+		if (visibleMenus[0].children.length > 0) {
+			childrenStr(visibleMenus[0].children, '');
+		}
 	} else {
-		redirect = redirect + '/' + menus[0].path;
+		redirect = redirect + '/' + visibleMenus[0].path;
 	}
 	return redirect;
 }

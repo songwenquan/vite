@@ -1,8 +1,8 @@
 /* * @Author: wqsong2 * @Date: 2023/11/3 14:48 * @Desciption:登录 */
 <template>
 	<div class="login fl">
-		<video poster="../../../assets/images/login/video-cover.jpeg" loop autoplay muted>
-			<source src="../../../assets/images/login/night.mp4" />
+		<video poster="../../assets/images/login/video-cover.jpeg" loop autoplay muted>
+			<source src="../../assets/images/login/night.mp4" />
 		</video>
 		<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 			<div class="title-container">
@@ -12,14 +12,14 @@
 				<LangSelect width="60" height="60" class="set-language cursor-p fz18" />
 			</div>
 			<el-form-item prop="username">
-				<span class="fz16 color-f">
+				<span class="fz16 color-f icon-text">
 					<el-icon class="username" :size="20"><User /></el-icon>{{ $t('login.username') }}:
 				</span>
 				<el-input ref="userNameRef" v-model="loginForm.username" :placeholder="$t('login.username')" type="text" tabindex="1" autocomplete="on" />
 			</el-form-item>
 			<el-tooltip :visible="state.capsTooltip" :content="$t('settings.CapsLock')" placement="right" manual>
 				<el-form-item prop="password">
-					<span class="fz16 color-f">
+					<span class="fz16 color-f icon-text">
 						<el-icon class="password" :size="20"><Lock /></el-icon>{{ $t('login.password') }}:
 					</span>
 					<el-input
@@ -53,7 +53,7 @@ const { proxy } = getCurrentInstance() as any; // this
 // 登录
 const state = reactive({
 	capsTooltip: false as boolean,
-	loading: false,
+	loading: false
 });
 interface RuleForm {
 	username: string;
@@ -79,7 +79,7 @@ const handleLogin = async (formEl: FormInstance | undefined) => {
 			const menus = await menuList.ACT_GetMenu();
 			if (menus.flag === true) {
 				if (menus.menu.length > 0) {
-					const url = childrenStr(menus.menu);
+					const url = childrenStr(menus.menu,1);
 					router.push({ path: url });
 				} else {
 					proxy.$message.warning('暂无菜单权限', 3000);
@@ -122,13 +122,16 @@ const handleLogin = async (formEl: FormInstance | undefined) => {
 				right: 0px;
 			}
 		}
+		.icon-text {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
 		.username,
 		.password {
-			padding: 6px 5px 6px 15px;
 			color: $color-f;
-			vertical-align: middle;
-			width: 30px;
-			display: inline-block;
+			display: flex;
+			align-items: center;
 		}
 	}
 }

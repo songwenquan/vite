@@ -30,7 +30,7 @@ const children: any = (menus: any, menuUrl: '') => {
 	menus.map((item: any) => {
 		item.menuUrl = menuUrl ? menuUrl + '/' + item.path : item.path;
 		item.menuName = item.meta.title;
-		item.meta.keepAlive = item.name.toLocaleLowerCase() === item.path.toLocaleLowerCase() ? true : false;
+		item.meta.keepAlive = item.meta.noCache ? item.meta.noCache  : false;
 		item.meta.fullScreen = 'TCB';
 		item.meta.requireAuth = true;
 		item.meta.nobread = true;
@@ -113,11 +113,6 @@ export default {
 					data: [],
 					flag: true,
 				};
-				response.data.map((item: any) => {
-					if(item.meta.title === '综合菜单'){
-						item.hidden = false
-					}
-				})
 				const lastElement = response.data.pop();
 				if (lastElement !== undefined) {
 					response.data.unshift(lastElement);
